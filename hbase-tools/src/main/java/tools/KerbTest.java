@@ -9,10 +9,11 @@ import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.ConnectionFactory;
-import org.apache.hadoop.hbase.client.Put;
+import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.client.ResultScanner;
+import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.util.Bytes;
-
 import org.apache.hadoop.security.UserGroupInformation;
 
 public class KerbTest 
@@ -36,7 +37,7 @@ public class KerbTest
 	    TableName tablename = null;
 	    //HTableDescriptor htd = null;
 	    try {
-	      UserGroupInformation.loginUserFromKeytab("oliver@OLIVER.COM", "/path/to/example_user.keytab");
+	      //UserGroupInformation.loginUserFromKeytab("oliver@OLIVER.COM", "/path/to/example_user.keytab");
 	      connection = ConnectionFactory.createConnection(conf);
 	      admin = connection.getAdmin();
 	      tablename = TableName.valueOf("table_example");
@@ -57,20 +58,18 @@ public class KerbTest
 	      e.printStackTrace();
 	    }
 
-	    Put put = new Put(Bytes.toBytes("Value to enter"));
-	    put.addColumn(Bytes.toBytes("cf1"), Bytes.toBytes("newQualifier"), Bytes.toBytes("NewValue"));
+	    //Put put = new Put(Bytes.toBytes("Value to enter"));
+	    Scan scan = new Scan();
+	    
+	    scan.addColumn(Bytes.toBytes("cf1"), Bytes.toBytes("newQualifier"));
+	    ResultScanner scanner = null;
 	    try {
-	      table.put(put);    
+	         scanner = table.getScanner(scan);
 	    } catch(Exception e) {
 	      e.printStackTrace();
 	    }
-	    // Insert rows for RowCounter
-	    for(int i = 400000; i < 700000; i++) {
-	    	Put insert = new Put(Bytes.toBytes(i));
-	    	try {
-	    		insert.addColumn(Bytes.toBytes("cf1"), Bytes.toBytes("newQualifier"), Bytes.toBytes("NewValue"));
-	    		table.put(insert);
-	    	} catch (Exception e) {}
+	    for(Result result : scanner) {
+	    	System.out.println(result.getRow().toString());
 	    }
 	    
 	  }
