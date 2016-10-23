@@ -9,6 +9,7 @@ import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
@@ -37,7 +38,8 @@ public class KerbTest
 	    TableName tablename = null;
 	    //HTableDescriptor htd = null;
 	    try {
-	      //UserGroupInformation.loginUserFromKeytab("oliver@OLIVER.COM", "/path/to/example_user.keytab");
+	      UserGroupInformation.loginUserFromKeytab("hbase-kerbed_2node@OLIVER.COM", "/etc/security/keytabs/hdfs.headless.keytab");
+	      // hdfs.headless.keytab
 	      connection = ConnectionFactory.createConnection(conf);
 	      admin = connection.getAdmin();
 	      tablename = TableName.valueOf("table_example");
@@ -57,6 +59,24 @@ public class KerbTest
 	    } catch(Exception e) {
 	      e.printStackTrace();
 	    }
+	    
+	    Put put = new Put(Bytes.toBytes("Value to enter"));
+	    put.addColumn(Bytes.toBytes("cf1"), Bytes.toBytes("newQualifier"), Bytes.toBytes("NewValue"));
+	    try {
+	      table.put(put);    
+	    } catch(Exception e) {
+	      e.printStackTrace();
+	    }
+	    // Insert rows for RowCounter
+	    for(int i = 50000; i < 50002; i++) {
+	    	String strVal = "'" + i + "'";
+	    	Put insert = new Put(Bytes.toBytes(strVal));
+	    	try {
+	    		insert.addColumn(Bytes.toBytes("cf1"), Bytes.toBytes("newQualifier"), Bytes.toBytes("NewValue"));
+	    		table.put(insert);
+	    	} catch (Exception e) {}
+	    }
+	    /*
 
 	    //Put put = new Put(Bytes.toBytes("Value to enter"));
 	    Scan scan = new Scan();
@@ -71,6 +91,7 @@ public class KerbTest
 	    for(Result result : scanner) {
 	    	System.out.println(result.getRow().toString());
 	    }
+	    */
 	    
 	  }
 }
