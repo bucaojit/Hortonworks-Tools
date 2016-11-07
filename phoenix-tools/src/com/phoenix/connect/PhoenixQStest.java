@@ -15,7 +15,7 @@ public class PhoenixQStest{
 	private static Connection getConnection() throws Exception {
 		Class.forName("org.apache.phoenix.queryserver.client.Driver");
 		return DriverManager.getConnection("jdbc:phoenix:thin:url=http://172.26.76.190:8765");
-	}
+	}  
 	
 		private static void checkTableSchema(Connection conn) throws SQLException {
 		Statement statement = conn.createStatement();
