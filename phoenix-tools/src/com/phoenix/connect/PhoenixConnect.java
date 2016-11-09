@@ -22,13 +22,16 @@ public class PhoenixConnect {
 		System.out.println("Got connection");
 		stmt = con.createStatement();
 		
-		stmt.executeUpdate("create table test (mykey integer not null primary key, mycolumn varchar)");
+		stmt.executeUpdate("create table if not exists test (mykey integer not null primary key, mycolumn varchar)");
 		stmt.executeUpdate("upsert into test values (1,'Hello')");
 		stmt.executeUpdate("upsert into test values (2,'World!')");
 		con.commit();
+		Statement statement = con.createStatement();
+		statement.execute("create table if not exists Insyte.AggregateStg (ID VARCHAR not null primary key,count BIGINT)");
+		
 		System.out.println("After commit");
-		PreparedStatement statement = con.prepareStatement("select * from test");
-		rset = statement.executeQuery();
+		PreparedStatement statement2 = con.prepareStatement("select * from test");
+		rset = statement2.executeQuery();
 		System.out.println("After query");
 		while (rset.next()) {
 			System.out.println(rset.getString("mycolumn"));
