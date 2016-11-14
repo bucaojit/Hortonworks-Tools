@@ -10,12 +10,36 @@ our @EXPORT_OK = qw(getMasterLogs getRSLogs);
 
 sub getMasterLogs {
   $directory = shift;
-  getAllFiles($directory);
+  @filenames = getAllFiles($directory);
+  getMatching(\@filenames,"Starting master");
+  
 }
 
 sub getRSLogs {
-  my $directory = shift;
+  $directory = shift;
+  @filenames = getAllFiles($directory);
+  getMatching(\@filenames,"Starting regionserver");
 
+}
+
+sub getMatching{
+  my ($files, $string )= @_;
+  # @files  = @{%_[1]};
+
+  my @fileReturn;
+  
+  foreach $filename (@$files) {
+    open (my $fh, '<:encoding(UTF-8)', $filename) 
+	  or die "Unable to open file '$filename' $!";
+	while (my $line = <$fh>) {
+	  chomp($line);
+	  if ($line =~ /$string/) {
+        push @fileReturn, $filename;
+		last;
+	  }
+	}
+  }
+  return @fileReturn;
 }
 
 sub getAllFiles {
@@ -23,7 +47,7 @@ sub getAllFiles {
 
   my @files;
   find( sub { push @files, $File::Find::name unless -d; }, $directory);
-  @files;
+  return @files;
 }
 
 1;
