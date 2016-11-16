@@ -30,9 +30,6 @@ if ($ARGV[1]) {
 }
 open ($status_detailed, $filename) or die $!;
 
-# Keywords:
-#  live servers, dead servers, 60020, requestsPerSecond, enter 'tablename'
-
 my $printNext = 0;
 while (my $line = <$status_detailed>) {
   if(($line =~ /regionsInTransition/) ||
@@ -49,7 +46,9 @@ while (my $line = <$status_detailed>) {
 	 $printNext = 0;
      
    }
-   if($line =~ /60020/) {
+   #  60020 for older HBase versions
+   if(($line =~ /60020/) || 
+      ($line =~ /16020/)){
      say "";
      print color ('yellow');
 	 print $line;
