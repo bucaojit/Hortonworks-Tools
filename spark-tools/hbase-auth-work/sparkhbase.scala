@@ -17,7 +17,7 @@ object HBaseRead {
 
     System.setProperty("user.name", "hdfs")
     System.setProperty("HADOOP_USER_NAME", "hdfs")
-    conf.set("hbase.master", "172.26.75.233:16000")
+    conf.set("hbase.master", "localhost:16000")
     conf.setInt("timeout", 12000)
     conf.set("hbase.zookeeper.quorum", "localhost")
     conf.set("zookeeper.znode.parent", "/hbase-unsecure")
