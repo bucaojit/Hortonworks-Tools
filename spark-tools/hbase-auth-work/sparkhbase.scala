@@ -24,6 +24,7 @@ object HBaseRead {
     conf.set(TableInputFormat.INPUT_TABLE, tableName)
 
     val admin = new HBaseAdmin(conf)
+    while(true) {
     if (!admin.isTableAvailable(tableName)) {
       println("before create table")
       val tableDesc = new HTableDescriptor(tableName)
@@ -35,6 +36,8 @@ object HBaseRead {
 
     val hBaseRDD = sc.newAPIHadoopRDD(conf, classOf[TableInputFormat], classOf[ImmutableBytesWritable], classOf[Result])
     println("Number of Records found : " + hBaseRDD.count())
+    Thread sleep 10000
+    }
     sc.stop()
   }
 }
