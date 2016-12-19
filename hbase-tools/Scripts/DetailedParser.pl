@@ -47,8 +47,8 @@ while (my $line = <$status_detailed>) {
      
    }
    #  60020 for older HBase versions
-   if(($line =~ /60020/) || 
-      ($line =~ /16020/)){
+   if(($line =~ /:60020 /) || 
+      ($line =~ /:16020 /)){
      say "";
      print color ('yellow');
 	 print $line;
