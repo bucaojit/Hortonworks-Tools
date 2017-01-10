@@ -8,7 +8,7 @@ use File::Find;
 use GetOpt::Long;
 use English qw' -no_match_vars ';
 
-our @EXPORT_OK = qw(getMasterLogs getRSLogs);
+our @EXPORT_OK = qw(processRSLogs processMasterLogs getMasterLogs getRSLogs);
 
 # Remember to utilize on mac: open 'http://www.yahoo.com'
 sub isMac {
@@ -62,11 +62,48 @@ sub getAllFiles {
   return @files;
 }
 
-sub processRSLog {
+sub processRSLogs {
+  $directory = shift;
+  say "Processing RegionServer logs in $directory";
+  @files = getRSLogs($directory);
+  foreach my $filename (@files) {
+    say "RS Log File: $filename";
+    processRSLogSingle($filename);
+  }
+}
+
+sub processRSLogSingle {
+  $filename = shift;
+  getStarting($filename, 'regionserver');
   
 }
 
-sub processMasterLog {
+sub processMasterLogs {
+  $directory = shift;
+  say "Processing Master logs in $directory";
+  @files = getMasterLogs($directory);
+  foreach my $filename (@files) {
+    say "Master Log File: $filename";
+    processMasterLogSingle($filename);
+  }
+}
+
+sub processMasterLogSingle {
+  $filename = shift;
+  getStarting($filename, 'master');
+
+}
+
+sub getStarting {
+  my ($filename, $type) = @_;
+  open (my $fh, '<:encoding(UTF-8)', $filename) 
+    or die "Unable to open file '$filename' $!";
+  while (my $line = <$fh>) {
+    chomp($line);
+    if ($line =~ /Starting $type/) {
+	  print "$line\n";
+    }
+  }
 
 }
 
