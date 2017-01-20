@@ -17,17 +17,15 @@ else
 
 		while (my $line = <$logfile>) {
 		        if($directory) {
-				        if(!($line=~/$directory/)) {
-								next;
-						}
+				if(!($line=~/$directory/)) {
+					next;
 				}
-				my @values = split(/\s+/,$line);
-				my $size = $values[4];
+			}
+			my @values = split(/\s+/,$line);
+			my $size = $values[4];
 
-                $count += $size;
-
+                	$count += $size;
 		}
-
 		print format_bytes($count);
 		print "\n";
 		print $count;
