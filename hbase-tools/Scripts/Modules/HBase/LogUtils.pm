@@ -90,7 +90,7 @@ sub processRSLogs {
 sub processRSLogSingle {
   $filename = shift;
   getStarting($filename, 'regionserver');
-  
+  checkJvmPause($filename);
 }
 
 sub processMasterLogs {
@@ -131,8 +131,26 @@ sub getJvmPause {
 }
 
 sub checkJvmPause {
-  # Configurable value default 20000ms
-  # If Error, print out the configvals, namely GC_OPTS (vmInput)
+  my ($filename) = @_;
+  open (my $fh, '<:encoding(UTF-8)', $filename) 
+    or die "Unable to open file '$filename' $!";
+  while (my $line = <$fh>) {
+    chomp($line);
+    if ($line =~ /JvmPause/) {
+      my $pausetime = 0;
+      @values = split(/\s+/,$line);
+      for my $value(@values) {
+        next unless $value =~ /ms/;
+        chomp $value;
+        
+        $pausetime = $value;
+        $pausetime =~ s/ms//g;
+      }
+      if($pausetime > 10000) {
+        print $line . "\n";
+      }
+    }
+  }
 
 }
 
