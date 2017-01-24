@@ -154,6 +154,16 @@ sub checkJvmPause {
 
 }
 
+sub checkPhoenix2915 {
+  # MultiIndexWriteFailureException: Failed to write to multiple index tables
+  # https://issues.apache.org/jira/browse/PHOENIX-2915
+}
+
+sub checkFailedRegionOpens {
+  # RS_ZK_REGION_FAILED_OPEN
+  # Circular list
+}
+
 sub getErrors {
 
 }
