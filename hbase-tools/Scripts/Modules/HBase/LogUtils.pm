@@ -7,6 +7,7 @@ use Exporter qw(import);
 use File::Find;
 use GetOpt::Long;
 use English qw' -no_match_vars ';
+use Array::Unique;
 
 our @EXPORT_OK = qw(processRSLogs processMasterLogs getMasterLogs getRSLogs);
 
@@ -23,33 +24,47 @@ sub isMac {
 sub getMasterLogs {
   $directory = shift;
   @filenames = getAllFiles($directory);
-  getMatching(\@filenames,"Starting master");
+  @returnfilenames = ();
+
+  @searchstr = ();
+  push @searchstr, "Starting master";
+  push @searchstr, "MasterProcWAL";
+
+  getMatching(\@filenames,\@searchstr);
   
 }
 
 sub getRSLogs {
   $directory = shift;
   @filenames = getAllFiles($directory);
-  getMatching(\@filenames,"Starting regionserver");
+  @returnfilenames = ();
 
+  @searchstr = ();
+  push @searchstr, "Starting regionserver";
+  push @searchstr, "HRegion: Started memstore flush";
+
+  getMatching(\@filenames,\@searchstr);
 }
 
 sub getMatching{
-  my ($files, $string )= @_;
-  # @files  = @{%_[1]};
+  my ($files, $strings )= @_;
 
   my @fileReturn;
+
+  tie @fileReturn, 'Array::Unique';
   
   foreach $filename (@$files) {
     open (my $fh, '<:encoding(UTF-8)', $filename) 
 	  or die "Unable to open file '$filename' $!";
-	while (my $line = <$fh>) {
-	  chomp($line);
-	  if ($line =~ /$string/) {
-        push @fileReturn, $filename;
-		last;
-	  }
-	}
+  	while (my $line = <$fh>) {
+  	  chomp($line);
+      foreach $searchstr (@$strings) {
+    	  if ($line =~ /$searchstr/) {
+            push @fileReturn, $filename;
+    		    last;
+    	  }
+      }
+  	}
   }
   return @fileReturn;
 }
