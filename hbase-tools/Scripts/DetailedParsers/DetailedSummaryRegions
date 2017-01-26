@@ -1,0 +1,40 @@
+#!/usr/bin/perl
+
+use warnings;
+use Term::ANSIColor;
+
+use Number::Bytes::Human qw(format_bytes);
+
+use feature qw(say)
+
+# Summarize statistics based on per-table
+
+my $filename = $ARGV[0];
+
+if (!$filename) {
+  say "No filename specified";
+  say "Usage: ";
+  say "       " . $0 . " <Filename> [Tablename]";
+  exit 1;
+}
+
+say ""; 
+say "***************** Processing " . $filename . " *****************";
+say ""; 
+
+open ($status_detailed, $filename) or die $!; 
+
+my %table_map;
+
+while(my $line = <$status_detailed>) {
+  # For each region calculate
+  #  - average datalocality
+  #  - Total StoreFileSize
+  #  - ReadRequests count - good for a graph - Think of how to show
+}
+
+# Sort by storefileSizeMB - Sort example:
+#		foreach my $dirname (sort {$dir_map{$a} <=> $dir_map{$b} } keys %dir_map) {
+#				printf "%-8s %s\n", format_bytes($dir_map{$dirname}), $dirname ;
+#       }
+#

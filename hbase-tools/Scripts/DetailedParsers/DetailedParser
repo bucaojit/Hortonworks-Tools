@@ -3,6 +3,7 @@
 use warnings;
 
 use Term::ANSIColor;
+
 use feature qw(say);
 
 # Parser for hbase shell> status 'detailed' output

@@ -73,8 +73,14 @@ sub getAllFiles {
   my $directory = shift;
 
   my @files;
+  my @fileret;
   find( sub { push @files, $File::Find::name unless -d; }, $directory);
-  return @files;
+  foreach $filename(@files) {
+    if($filename =~ /.log$/) {
+      push @fileret, $filename;
+    }
+  }
+  return @fileret;
 }
 
 sub processRSLogs {
