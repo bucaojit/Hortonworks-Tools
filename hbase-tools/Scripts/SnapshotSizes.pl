@@ -50,7 +50,7 @@ else
                 $dir_map{$name} = $count_dir;
 		}
 		foreach my $dirname (sort {$dir_map{$a} <=> $dir_map{$b} } keys %dir_map) {
-				printf "%-15s %s\n", nice_size($dir_map{$dirname}), $dirname ;
+				printf "%15s %s\n", nice_size($dir_map{$dirname}), $dirname ;
 		}
 }
 # Taken from http://www.perlmonks.org/?node_id=378538
