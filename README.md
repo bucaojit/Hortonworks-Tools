@@ -1,7 +1,13 @@
-How to run:
+# Troubleshooting Tools
+## HBase
+### SimpleLoad
+### Scripts
 
-# hadoop jar  hbase-example-1.0-SNAPSHOT.jar main.java.tools.App
+## HDFS
 
-# javac -cp \`hbase classpath\` KerbTest2.java
-# java -cp \`hbase classpath\` KerbTest2
-# Notice BackTicks
+## Java
+
+## Phoenix
+
+## Spark
+
