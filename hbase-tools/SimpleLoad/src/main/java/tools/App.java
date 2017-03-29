@@ -17,8 +17,20 @@ public class App
 {
 
 	public static void main(String[] args) {
+            String  tablenamestr = "table_example";
+            Integer start = 0;
+            Integer end   = 100000;
+            if(args.length == 1) {
+              end = Integer.parseInt(args[0]);
+            }
+            else if(args.length == 2) {
+              start = Integer.parseInt(args[0]);
+              end   = Integer.parseInt(args[1]);
+            } 
+            System.out.println("Loading into " + tablenamestr +
+                               " numbers " + start + " to " +
+                               end);
 		
-	    //HTable ht = null;
 	    Table table = null;
 	    Configuration conf = HBaseConfiguration.create();
 	    conf.addResource(new Path("/etc/hbase/conf/hbase-site.xml"));
@@ -26,21 +38,16 @@ public class App
 	    Connection connection = null;
 	    Admin admin = null;
 	    TableName tablename = null;
-	    //HTableDescriptor htd = null;
 	    try {
 	      connection = ConnectionFactory.createConnection(conf);
 	      admin = connection.getAdmin();
-	      tablename = TableName.valueOf("table_example");
+	      tablename = TableName.valueOf(tablenamestr);
 
 	      if(!admin.isTableAvailable(tablename)) {
 	        HTableDescriptor desc = new HTableDescriptor(tablename);
 	        desc.addFamily(new HColumnDescriptor("cf1"));
 	        admin.createTable(desc);
-	        //admin.createTable(desc);
-	        
 	      }
-	      //ht = new HTable(conf, "table_example");
-	      //htd = admin.getTableDescriptor(tablename);
 	      table = connection.getTable(tablename);
 	      
 	      
@@ -48,15 +55,8 @@ public class App
 	      e.printStackTrace();
 	    }
 
-	    Put put = new Put(Bytes.toBytes("Value to enter"));
-	    put.addColumn(Bytes.toBytes("cf1"), Bytes.toBytes("newQualifier"), Bytes.toBytes("NewValue"));
-	    try {
-	      table.put(put);    
-	    } catch(Exception e) {
-	      e.printStackTrace();
-	    }
 	    // Insert rows for RowCounter
-	    for(int i = 400000; i < 700000; i++) {
+	    for(int i = start; i < end; i++) {
 	    	Put insert = new Put(Bytes.toBytes(i));
 	    	try {
 	    		insert.addColumn(Bytes.toBytes("cf1"), Bytes.toBytes("newQualifier"), Bytes.toBytes("NewValue"));
