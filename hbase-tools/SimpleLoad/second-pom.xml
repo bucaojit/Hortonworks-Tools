@@ -231,6 +231,14 @@
       <artifactId>mockito-all</artifactId>
       <scope>test</scope>
     </dependency>
+<dependency>
+              <groupId>org.apache.phoenix</groupId>
+              <!-- Phoenix 4.7 artifact name -->
+              <!-- <artifactId>phoenix-server-client</artifactId> -->
+              <!-- Phoenix 4.8+ artifact name -->
+              <artifactId>phoenix-core</artifactId>
+              <version>4.7.0.2.5.0.0-1245</version>
+</dependency>
   </dependencies>
 
   <profiles>
@@ -409,4 +417,19 @@
       </dependencies>
     </profile>
   </profiles>
+    <repositories>
+      <repository>
+        <id>hortonworks</id>
+        <url>http://repo.hortonworks.com/content/repositories/releases/</url>
+      </repository>   
+     <repository>
+        <id>repo.hortonworks.com-jetty</id>
+        <name>Hortonworks Jetty Maven Repository</name>
+        <url>http://repo.hortonworks.com/content/repositories/jetty-hadoop/</url>
+      </repository>
+      <repository>
+        <id>apache</id>
+        <url>http://repository.apache.org/content/repositories/releases/</url>
+      </repository>
+</repositories>
 </project>

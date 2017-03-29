@@ -25,10 +25,12 @@ public class PhoenixConnect {
 		stmt = con.createStatement();
 
                 selectGreater = con.prepareStatement("select * from test where mykey > ?");
+                selectGreater.setInt(1,1);
                 ResultSet rs = selectGreater.executeQuery();
                 while(rs.next()) {
                 	System.out.println("Result: " + rs);
 		}
+		//stmt.executeQuery("select * from test where mykey > ?");
 		
 		stmt.executeUpdate("create table if not exists test (mykey integer not null primary key, mycolumn varchar)");
 		stmt.executeUpdate("upsert into test values (1,'Hello')");
