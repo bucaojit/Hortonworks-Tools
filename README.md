@@ -1,8 +1,7 @@
 # Troubleshooting Tools
 ## HBase
-### Scripts
+### __Scripts__
 #### SnapshotSizes.pl
-#### snapshot_sizes.pl
 - Purpose: To calculate the disk usage of each table snapshot
 - Inputs:  Output from `hdfs dfs -ls -R /`
 - Usage:   `./snapshot_sizes.pl hdfs_ls.out`
@@ -14,11 +13,9 @@
 - Output:  Property Value
 - Usage:   `getHBaseProperty zookeeper.znode.parent`
 
-
-### SimpleLoad
+### Java Applications
+#### SimpleLoad
 Java client application that creates HBase table 'table_example' with column family 'cf1' and loads in an integer row
-
-
 
 ## HDFS
 
